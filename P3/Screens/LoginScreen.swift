@@ -7,6 +7,7 @@ struct LoginScreen: View {
     @State var isLoginMode = false
     @State var email = ""
     @State var password = ""
+    @State var dpPath = ""
     
     
     
