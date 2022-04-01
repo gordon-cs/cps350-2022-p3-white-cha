@@ -2,16 +2,28 @@ import SwiftUI
 import Firebase
 
 
+/*
+ Singleton FirebaseApp to prevent reconfigure crash
+ */
+class firebaseManager: NSObject {
+    let auth: Auth
+    //singleton
+    static let shared = firebaseManager()
+    
+    override init () {
+        FirebaseApp.configure()
+        self.auth = Auth.auth()
+        super.init()
+    }
+    
+}
+
 struct LoginScreen: View {
     
     @State var isLoginMode = false
     @State var email = ""
     @State var password = ""
     @State var dpPath = ""
-    
-    init() {
-        FirebaseApp.configure()
-    }
     
     var body: some View {
         NavigationView {
@@ -65,6 +77,18 @@ struct LoginScreen: View {
                             Spacer()
                         }.background(Color.blue)
                     }
+                    
+                    //Login Message Display
+                    
+                    Text(self.loginMessage)
+                        .foregroundColor(.red)
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                 }.padding()
                 
                 
@@ -80,6 +104,7 @@ struct LoginScreen: View {
     
     private func handleAccount() {
         if isLoginMode {
+            loginAcc()
             print("Log into Firebase w/ email \(email) & password \(password)")
         } else {
             createAcc()
@@ -87,15 +112,44 @@ struct LoginScreen: View {
         }
     }
     
+    
+    
+    
+    
+    @State var loginMessage = ""
+    /*
+     Logs into Account
+     */
+    private func loginAcc() {
+        firebaseManager.shared.auth.signIn(withEmail: email, password: password) {
+            result, e in
+            if let e = e {
+                print("Failed to log into user:", e)
+                self.loginMessage = "Failed: \(e)"
+                return
+            }
+            
+            print("logged into user: \(result?.user.uid ?? "" ) ")
+            self.loginMessage = "logged into user: \(result?.user.uid ?? "" ) "
+        }
+            
+        
+    }
+    
+    /*
+     Create Account Function
+     */
     private func createAcc() {
-        Auth.auth().createUser(withEmail: email, password: password) {
+        firebaseManager.shared.auth.createUser(withEmail: email, password: password) {
             result, e in
             if let e = e {
                 print("Failed to create user:", e)
+                self.loginMessage = "Failed: \(e)"
                 return
             }
             
             print("created user: \(result?.user.uid ?? "" ) ")
+            self.loginMessage = "created user: \(result?.user.uid ?? "" ) "
         }
             
         
