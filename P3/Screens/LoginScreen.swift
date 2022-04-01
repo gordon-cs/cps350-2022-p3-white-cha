@@ -1,5 +1,5 @@
 import SwiftUI
-
+import Firebase
 
 
 struct LoginScreen: View {
@@ -9,7 +9,9 @@ struct LoginScreen: View {
     @State var password = ""
     @State var dpPath = ""
     
-    
+    init() {
+        FirebaseApp.configure()
+    }
     
     var body: some View {
         NavigationView {
@@ -72,6 +74,7 @@ struct LoginScreen: View {
             .background(Color(.init(white:0, alpha: 0.05))
                             .ignoresSafeArea())
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
     
     
@@ -79,8 +82,23 @@ struct LoginScreen: View {
         if isLoginMode {
             print("Log into Firebase w/ email \(email) & password \(password)")
         } else {
+            createAcc()
             print("Register new Firebase account w/ email \(email) & password \(password) & image")
         }
+    }
+    
+    private func createAcc() {
+        Auth.auth().createUser(withEmail: email, password: password) {
+            result, e in
+            if let e = e {
+                print("Failed to create user:", e)
+                return
+            }
+            
+            print("created user: \(result?.user.uid ?? "" ) ")
+        }
+            
+        
     }
     
     
