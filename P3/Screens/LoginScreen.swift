@@ -7,12 +7,14 @@ import Firebase
  */
 class firebaseManager: NSObject {
     let auth: Auth
+    let storage: Storage
     //singleton
     static let shared = firebaseManager()
     
     override init () {
         FirebaseApp.configure()
         self.auth = Auth.auth()
+        self.storage = Storage.storage()
         super.init()
     }
     
@@ -20,10 +22,18 @@ class firebaseManager: NSObject {
 
 struct LoginScreen: View {
     
+    //used for screen tabbing
     @State var isLoginMode = false
+    
+    //used for credentials
     @State var email = ""
     @State var password = ""
-    @State var dpPath = ""
+    
+    
+    //used for profile picture
+    @State var ShowImageSelect = false
+    @State var image: UIImage?
+    
     
     var body: some View {
         NavigationView {
@@ -45,11 +55,28 @@ struct LoginScreen: View {
                     // Displays Profile Picture Selection if not LoginMode
                     if !isLoginMode {
                         Button {
-                            
+                            ShowImageSelect.toggle()
                         } label: {
-                            Image(systemName: "person.fill")
-                                .font(.system(size:64))
-                                .padding()
+                            
+                            VStack {
+                                if let image = self.image {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 140, height: 140)
+                                        .cornerRadius(140)
+                                } else {
+                                    Image(systemName: "person.fill")
+                                        .font(.system(size:64))
+                                        .padding()
+                                        .foregroundColor(Color(.gray))
+                                }
+                            }
+                            .overlay(RoundedRectangle(cornerRadius: 140)
+                                        .stroke(Color.gray, lineWidth: 2)
+                            )
+            
+                            
                         }
                     }
                     
@@ -75,7 +102,9 @@ struct LoginScreen: View {
                                 .foregroundColor(.white)
                                 .padding(.vertical, 10)
                             Spacer()
-                        }.background(Color.blue)
+                        }
+                        .background(Color.blue)
+                        
                     }
                     
                     //Login Message Display
@@ -99,6 +128,10 @@ struct LoginScreen: View {
                             .ignoresSafeArea())
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .fullScreenCover(isPresented: $ShowImageSelect, onDismiss: nil) {
+            //Text("test")
+            ImageSelect(image: $image)
+        }
     }
     
     
@@ -150,9 +183,40 @@ struct LoginScreen: View {
             
             print("created user: \(result?.user.uid ?? "" ) ")
             self.loginMessage = "created user: \(result?.user.uid ?? "" ) "
+            self.ImageToStorage()
         }
-            
+    }
+    
+    
+    //Moves selected image to firebase storage
+    private func ImageToStorage() {
         
+        guard let uid = firebaseManager.shared.auth.currentUser?.uid
+            else { return }
+        
+        guard let imgData = self.image?.jpegData(compressionQuality: 0.69)
+            else { return }
+        
+        let reference = firebaseManager.shared.storage.reference(withPath: uid)
+        
+        
+        reference.putData(imgData, metadata: nil) { metadata, error in
+            if let error = error {
+                self.loginMessage = "Unable to save image to storage: \(error)"
+                return
+            }
+            
+            reference.downloadURL { url, error in
+                if let error = error {
+                    self.loginMessage = "Failed to download URL: \(error)"
+                    return
+                }
+                self.loginMessage = "Stored image with url: \(url?.absoluteString ?? "") "
+                print(url?.absoluteString)
+            }
+            
+            
+        }
     }
     
     
