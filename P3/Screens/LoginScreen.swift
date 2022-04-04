@@ -1,5 +1,6 @@
 import SwiftUI
 import Firebase
+import FirebaseFirestore
 
 
 /*
@@ -8,6 +9,7 @@ import Firebase
 class firebaseManager: NSObject {
     let auth: Auth
     let storage: Storage
+    let firestore: Firestore
     //singleton
     static let shared = firebaseManager()
     
@@ -15,6 +17,7 @@ class firebaseManager: NSObject {
         FirebaseApp.configure()
         self.auth = Auth.auth()
         self.storage = Storage.storage()
+        self.firestore = Firestore.firestore()
         super.init()
     }
     
@@ -28,7 +31,7 @@ struct LoginScreen: View {
     //used for credentials
     @State var email = ""
     @State var password = ""
-    
+    @State var loginMessage = ""
     
     //used for profile picture
     @State var ShowImageSelect = false
@@ -42,15 +45,15 @@ struct LoginScreen: View {
                 
                 VStack(spacing: 16) {
                     
-                    
                     //Selection tab
-                    Picker(selection: $isLoginMode, label: Text("Picker here")) {
+                    Picker(selection: $isLoginMode, label: Text("Picker")) {
                         Text("Login")
                             .tag(true)
                         Text("Create Account")
                             .tag(false)
                     }.pickerStyle(SegmentedPickerStyle())
                         .padding()
+                    // end of selection tab
                     
                     // Displays Profile Picture Selection if not LoginMode
                     if !isLoginMode {
@@ -75,24 +78,25 @@ struct LoginScreen: View {
                             .overlay(RoundedRectangle(cornerRadius: 140)
                                         .stroke(Color.gray, lineWidth: 2)
                             )
-            
-                            
                         }
                     }
+                    // End of Profile Pic
                     
                     // Email & PW Textfield
                     TextField("Email", text: $email)
-                        .keyboardType(.emailAddress)
                         .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .keyboardType(.emailAddress)
                         .padding(12)
                         .background(Color.white)
                     
                     SecureField("Password", text: $password)
                         .padding(12)
                         .background(Color.white)
+                    // end of email/pw textfield
                     
                     
-                    // Create Button
+                    // Create/Login Button
                     Button {
                         handleAccount()
                     } label: {
@@ -106,16 +110,14 @@ struct LoginScreen: View {
                         .background(Color.blue)
                         
                     }
+                    // end of login/create button
+                    
+                    
                     
                     //Login Message Display
-                    
                     Text(self.loginMessage)
                         .foregroundColor(.red)
-                    
-                    
-                    
-                    
-                    
+                    //end of login message
                     
                     
                 }.padding()
@@ -128,13 +130,17 @@ struct LoginScreen: View {
                             .ignoresSafeArea())
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        
+        // used for image selection
         .fullScreenCover(isPresented: $ShowImageSelect, onDismiss: nil) {
             //Text("test")
             ImageSelect(image: $image)
         }
     }
     
-    
+    /*
+    Accout login/creation handler
+     */
     private func handleAccount() {
         if isLoginMode {
             loginAcc()
@@ -146,10 +152,6 @@ struct LoginScreen: View {
     }
     
     
-    
-    
-    
-    @State var loginMessage = ""
     /*
      Logs into Account
      */
@@ -211,12 +213,35 @@ struct LoginScreen: View {
                     self.loginMessage = "Failed to download URL: \(error)"
                     return
                 }
-                self.loginMessage = "Stored image with url: \(url?.absoluteString ?? "") "
+                self.loginMessage = "Stored image  url: \(url?.absoluteString ?? "") "
                 print(url?.absoluteString)
+                
+                
+                // guard variable needed to silence:
+                // Value of optional type 'URL?' must be unwrapped to a value of type 'URL'
+                guard let url = url else { return }
+                self.storeUserInfo(imgURL: url)
             }
-            
-            
         }
+    }
+    
+    private func storeUserInfo(imgURL: URL) {
+        
+        guard let uid = firebaseManager.shared.auth.currentUser?.uid else {
+            return
+        }
+        
+        let userData = ["email": self.email, "uid": uid, "imgURL": imgURL.absoluteString]
+        
+        firebaseManager.shared.firestore.collection("users")
+            .document( uid ).setData(userData) { error in
+                if let error = error {
+                    print(error)
+                    self.loginMessage = "\(error)"
+                    return
+                }
+                print("stored in firestore")
+            }
     }
     
     
