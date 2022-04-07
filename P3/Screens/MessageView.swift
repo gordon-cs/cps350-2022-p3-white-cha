@@ -17,10 +17,15 @@ struct MessageView: View {
                 //customizable nav bar
                 navBar()
                     
-                    ScrollView {
+                ScrollView {
                         
-                        ForEach(0..<69, id: \.self) { num in
-                            messageCell()
+                        ForEach(0..<1, id: \.self) { num in
+                            Button {
+                                print("message cell")
+                            } label: {
+                                messageCell()
+                            }
+                            
                         }
                         
                     }

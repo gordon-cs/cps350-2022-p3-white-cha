@@ -225,24 +225,24 @@ struct LoginScreen: View {
         }
     }
     
-    private func storeUserInfo(imgURL: URL) {
-        
-        guard let uid = firebaseManager.shared.auth.currentUser?.uid else {
-            return
-        }
-        
-        let userData = ["email": self.email, "uid": uid, "imgURL": imgURL.absoluteString]
-        
-        firebaseManager.shared.firestore.collection("users")
-            .document( uid ).setData(userData) { error in
-                if let error = error {
-                    print(error)
-                    self.loginMessage = "\(error)"
-                    return
-                }
-                print("stored in firestore")
+        private func storeUserInfo(imgURL: URL) {
+            
+            guard let uid = firebaseManager.shared.auth.currentUser?.uid else {
+                return
             }
-    }
+            
+            let userData = ["email": self.email, "uid": uid, "imgURL": imgURL.absoluteString]
+            
+            firebaseManager.shared.firestore.collection("users")
+                .document( uid ).setData(userData) { error in
+                    if let error = error {
+                        print(error)
+                        self.loginMessage = "\(error)"
+                        return
+                    }
+                    print("stored in firestore")
+                }
+        }
     
     
 }
