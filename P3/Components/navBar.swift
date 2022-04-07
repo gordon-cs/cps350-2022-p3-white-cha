@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct navBar: View {
+    
     var body: some View {
         HStack {
             
@@ -53,10 +54,9 @@ struct navBar: View {
                     .font(.system(size: 25))
                     .foregroundColor(Color(.gray))
             }
-        
+            
         }
         .padding()
-        Divider()
     }
 }
 
