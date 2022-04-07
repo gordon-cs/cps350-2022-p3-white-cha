@@ -8,11 +8,13 @@
 import CryptoKit
 import Foundation
 
+/// Generate a private key according to the Curve25519 encryption public/private key protocol
+///
+/// - Returns: the private key in its PrivateKey() struct format
+///
 func generatePrivateKey() -> Curve25519.KeyAgreement.PrivateKey {
     return Curve25519.KeyAgreement.PrivateKey()
 }
-
-
 
 /// Converts a encryption key to a string so it can be stored locally
 ///

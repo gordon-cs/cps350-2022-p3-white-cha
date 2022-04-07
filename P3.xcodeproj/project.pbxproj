@@ -12,6 +12,7 @@
 		1EF1269827FF60D500AE3B8D /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 1EF1269727FF60D500AE3B8D /* FirebaseStorage */; };
 		1EF1269E27FF640A00AE3B8D /* Encryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF1269D27FF640A00AE3B8D /* Encryption.swift */; };
 		1EF126A027FF667D00AE3B8D /* ManageLocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF1269F27FF667D00AE3B8D /* ManageLocalData.swift */; };
+		1EF126A427FFA43700AE3B8D /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EF126A327FFA43700AE3B8D /* ChatView.swift */; };
 		B0B1B33027F6C38800D4DAAA /* P3App.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B1B32F27F6C38800D4DAAA /* P3App.swift */; };
 		B0B1B33427F6C38B00D4DAAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0B1B33327F6C38B00D4DAAA /* Assets.xcassets */; };
 		B0B1B33727F6C38B00D4DAAA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0B1B33627F6C38B00D4DAAA /* Preview Assets.xcassets */; };
@@ -46,6 +47,7 @@
 /* Begin PBXFileReference section */
 		1EF1269D27FF640A00AE3B8D /* Encryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encryption.swift; sourceTree = "<group>"; };
 		1EF1269F27FF667D00AE3B8D /* ManageLocalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageLocalData.swift; sourceTree = "<group>"; };
+		1EF126A327FFA43700AE3B8D /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		B0B1B32C27F6C38800D4DAAA /* P3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = P3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0B1B32F27F6C38800D4DAAA /* P3App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = P3App.swift; sourceTree = "<group>"; };
 		B0B1B33327F6C38B00D4DAAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 			children = (
 				B0B1B35A27F6C45E00D4DAAA /* LoginScreen.swift */,
 				B0B3F0F727FB8BB3005482B7 /* MessageView.swift */,
+				1EF126A327FFA43700AE3B8D /* ChatView.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				B0B3F0F827FB8BB3005482B7 /* MessageView.swift in Sources */,
 				B0B3F0FA27FBB0A3005482B7 /* navBar.swift in Sources */,
 				B0B1B33027F6C38800D4DAAA /* P3App.swift in Sources */,
+				1EF126A427FFA43700AE3B8D /* ChatView.swift in Sources */,
 				B0B3F0FC27FBB0E3005482B7 /* messageCell.swift in Sources */,
 				B0B1B35B27F6C45E00D4DAAA /* LoginScreen.swift in Sources */,
 				B0B3F0E827F8E45A005482B7 /* ImageSelect.swift in Sources */,
