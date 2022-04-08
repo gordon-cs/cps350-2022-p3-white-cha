@@ -12,15 +12,10 @@ SFS (requests)
 
 
 API/Services:
-CryptoKit (for end to end encryption)
+Swift in-built MessageUI
+Swift in-built Messages
+Swift Endpoint Security
 Firebase Database
 
-Resources Used for Crypto Kit:
-- https://developer.apple.com/documentation/cryptokit
-  - Used throughout the entire development cycle for the cryptography functions, every third party code snippet was checked with the Apple documentation to both understand and use the code correctly
-- https://betterprogramming.pub/how-to-set-up-end-to-end-encryption-in-an-ios-app-using-apples-cryptokit-e94815652e9c
-  - Helpful starting point for how the different Cryptography pieces work together
-- https://getstream.io/blog/ios-cryptokit-framework-chat/
-  - Really nice code here with good error checking that we found very late but was not far off at all from what we had written, so we modified it for our needs using it as a template
-- All documentation for the functions was completed by us as well as the actual use of the Cryptography functions in our demo
+
 
