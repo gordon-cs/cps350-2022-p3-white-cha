@@ -19,6 +19,10 @@ struct LoginScreen: View {
     @State var ShowImageSelect = false
     @State var image: UIImage?
     
+    //login handler
+    @State var log_in = false
+
+    
     
     var body: some View {
         NavigationView {
@@ -78,9 +82,11 @@ struct LoginScreen: View {
                     // end of email/pw textfield
                     
                     
+                    
                     // Create/Login Button
                     Button {
                         handleAccount()
+                        
                     } label: {
                         HStack {
                             Spacer()
@@ -92,6 +98,8 @@ struct LoginScreen: View {
                         .background(Color.blue)
                         
                     }
+                    
+
                     // end of login/create button
                     
                     
@@ -112,6 +120,7 @@ struct LoginScreen: View {
                             .ignoresSafeArea())
         }
         .navigationViewStyle(StackNavigationViewStyle())
+        .navigate(to: MessageView(), when: $log_in)
         
         // used for image selection
         .fullScreenCover(isPresented: $ShowImageSelect, onDismiss: nil) {
@@ -148,6 +157,7 @@ struct LoginScreen: View {
             
             print("logged into user: \(result?.user.uid ?? "" ) ")
             self.loginMessage = "logged into user: \(result?.user.uid ?? "" ) "
+            log_in.toggle()
         }
             
         
@@ -169,6 +179,8 @@ struct LoginScreen: View {
             self.loginMessage = "created user: \(result?.user.uid ?? "" ) "
             self.ImageToStorage()
         }
+        
+        loginAcc()
     }
     
     
