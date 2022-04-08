@@ -16,6 +16,7 @@ class MessageViewmodel: ObservableObject {
     @Published var currentUser: CurrentUser?
     
     init() {
+
 //        login()
         fetchCurrentUser()
     }
@@ -33,7 +34,7 @@ class MessageViewmodel: ObservableObject {
 //        }
 //    }
 //
-    
+
     private func fetchCurrentUser() {
 
         guard let uid = firebaseManager.shared.auth.currentUser?.uid else {
@@ -54,7 +55,7 @@ class MessageViewmodel: ObservableObject {
                 self.msg = "no data"
                 return
             }
-                        
+
             let uid = data["uid"] as? String ?? ""
             let email = data["email"] as? String ?? ""
             let imgURL = data["imgURL"] as? String ?? ""
@@ -72,9 +73,11 @@ struct MessageView: View {
     
     //Custom Nav Bar
     var NavBar: some View {
+
 //        Text("\(viewmodel.msg)")
         
         HStack {
+
             //profile pic
             VStack {
                 Button {

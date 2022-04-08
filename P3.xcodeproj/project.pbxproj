@@ -55,6 +55,7 @@
 		B05D39432800118400DF0E6F /* Encryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Encryption.swift; sourceTree = "<group>"; };
 		B05D39452800119800DF0E6F /* ManageLocalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageLocalData.swift; sourceTree = "<group>"; };
 		B05D3947280021F800DF0E6F /* NavigationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHelper.swift; sourceTree = "<group>"; };
+
 		B0B1B32C27F6C38800D4DAAA /* P3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = P3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0B1B32F27F6C38800D4DAAA /* P3App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = P3App.swift; sourceTree = "<group>"; };
 		B0B1B33327F6C38B00D4DAAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -194,6 +195,7 @@
 				B05D393227FFF00200DF0E6F /* Variables.swift */,
 				B05D393A280008C400DF0E6F /* CurrentUser.swift */,
 				B05D3947280021F800DF0E6F /* NavigationHelper.swift */,
+
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -339,6 +341,7 @@
 			files = (
 				B0B3F0F827FB8BB3005482B7 /* MessageView.swift in Sources */,
 				B05D3948280021F800DF0E6F /* NavigationHelper.swift in Sources */,
+
 				B05D393327FFF00200DF0E6F /* Variables.swift in Sources */,
 				B0B1B33027F6C38800D4DAAA /* P3App.swift in Sources */,
 				B0B3F0FC27FBB0E3005482B7 /* messageCell.swift in Sources */,
