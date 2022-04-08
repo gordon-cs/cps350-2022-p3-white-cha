@@ -12,9 +12,7 @@ SFS (requests)
 
 
 API/Services:
-Swift in-built MessageUI
-Swift in-built Messages
-Swift Endpoint Security
+CryptoKit (for end to end encryption)
 Firebase Database
 
 
