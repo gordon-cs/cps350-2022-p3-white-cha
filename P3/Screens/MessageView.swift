@@ -164,7 +164,9 @@ struct MessageView: View {
                                 messageCell()
                             }
                             Divider()
+                                .padding(.vertical,8)
                         }
+                        
                     }
                     .padding(.horizontal)
                 

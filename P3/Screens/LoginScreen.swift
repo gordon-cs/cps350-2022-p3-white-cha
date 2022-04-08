@@ -140,6 +140,7 @@ struct LoginScreen: View {
             createAcc()
             print("Register new Firebase account w/ email \(email) & password \(password) & image")
         }
+        
     }
     
     
@@ -158,9 +159,8 @@ struct LoginScreen: View {
             print("logged into user: \(result?.user.uid ?? "" ) ")
             self.loginMessage = "logged into user: \(result?.user.uid ?? "" ) "
             log_in.toggle()
-        }
             
-        
+        }
     }
     
     /*
@@ -178,9 +178,8 @@ struct LoginScreen: View {
             print("created user: \(result?.user.uid ?? "" ) ")
             self.loginMessage = "created user: \(result?.user.uid ?? "" ) "
             self.ImageToStorage()
+            log_in.toggle()
         }
-        
-        loginAcc()
     }
     
     
