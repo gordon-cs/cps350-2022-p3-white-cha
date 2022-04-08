@@ -21,7 +21,7 @@ func generatePrivateKey() -> Curve25519.KeyAgreement.PrivateKey {
 /// - Parameters:
 ///     - privateKey: the Curve25519 private key to be converted
 /// - Returns: the string representation of the private key
-/// 
+///
 func exportPrivateKey(_ privateKey: Curve25519.KeyAgreement.PrivateKey) -> String {
     let rawPrivateKey = privateKey.rawRepresentation
     let privateKeyBase64 = rawPrivateKey.base64EncodedString()
