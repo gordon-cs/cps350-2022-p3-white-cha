@@ -16,27 +16,23 @@ class MessageViewmodel: ObservableObject {
     @Published var currentUser: CurrentUser?
     
     init() {
-        login()
+//        login()
         fetchCurrentUser()
     }
-    /*
-     * temporary hard coded login
-     */
-    private func login() {
-        firebaseManager.shared.auth.signIn(withEmail: "test@test.com", password: "testtest") {
-            result, e in
-            if let e = e {
-                print("Failed to log into user:", e)
-                return
-            }
-            print("logged into user: \(result?.user.uid ?? "" ) ")
-        }
-    }
-    
-    
-    
-    
-    
+//    /*
+//     * temporary hard coded login
+//     */
+//    private func login() {
+//        firebaseManager.shared.auth.signIn(withEmail: "test@test.com", password: "testtest") {
+//            result, e in
+//            if let e = e {
+//                print("Failed to log into user:", e)
+//                return
+//            }
+//            print("logged into user: \(result?.user.uid ?? "" ) ")
+//        }
+//    }
+//
     
     private func fetchCurrentUser() {
 
@@ -58,9 +54,7 @@ class MessageViewmodel: ObservableObject {
                 self.msg = "no data"
                 return
             }
-            
-            print(data)
-            
+                        
             let uid = data["uid"] as? String ?? ""
             let email = data["email"] as? String ?? ""
             let imgURL = data["imgURL"] as? String ?? ""
@@ -78,8 +72,9 @@ struct MessageView: View {
     
     //Custom Nav Bar
     var NavBar: some View {
+//        Text("\(viewmodel.msg)")
+        
         HStack {
-            
             //profile pic
             VStack {
                 Button {

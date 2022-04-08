@@ -11,7 +11,7 @@ import SwiftUI
 struct P3App: App {
     var body: some Scene {
         WindowGroup {
-            MessageView()
+            LoginScreen()
         }
     }
 }
