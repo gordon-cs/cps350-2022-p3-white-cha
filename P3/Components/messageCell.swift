@@ -17,8 +17,8 @@ struct messageCell: View {
             Image(systemName: "person.fill")
                 .font(.system(size:30))
                 .foregroundColor(Color(.gray))
-                .padding(6)
-                .overlay(RoundedRectangle(cornerRadius: 36)
+                .padding(4)
+                .overlay(RoundedRectangle(cornerRadius: 30)
                             .stroke(Color.gray, lineWidth: 2))
                 
             VStack(alignment: .leading) {
@@ -29,7 +29,6 @@ struct messageCell: View {
             
             Text("last_msg_time")
         }
-        Divider()
     }
 }
 
