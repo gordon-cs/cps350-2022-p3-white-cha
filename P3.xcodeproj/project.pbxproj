@@ -107,13 +107,33 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		B05D39422800114400DF0E6F /* MessageHelpers */ = {
+		B05D394B280114FB00DF0E6F /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B05D393227FFF00200DF0E6F /* Variables.swift */,
+				B05D3947280021F800DF0E6F /* NavigationHelper.swift */,
+				B05D394D2801151700DF0E6F /* FirebaseHelpers */,
+				B05D394C2801150800DF0E6F /* MessageHelpers */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		B05D394C2801150800DF0E6F /* MessageHelpers */ = {
 			isa = PBXGroup;
 			children = (
 				B05D39432800118400DF0E6F /* Encryption.swift */,
 				B05D39452800119800DF0E6F /* ManageLocalData.swift */,
 			);
 			path = MessageHelpers;
+			sourceTree = "<group>";
+		};
+		B05D394D2801151700DF0E6F /* FirebaseHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				B0B3F0E727F8E45A005482B7 /* ImageSelect.swift */,
+				B05D393A280008C400DF0E6F /* CurrentUser.swift */,
+			);
+			path = FirebaseHelpers;
 			sourceTree = "<group>";
 		};
 		B0B1B32327F6C38800D4DAAA = {
@@ -139,7 +159,7 @@
 		B0B1B32E27F6C38800D4DAAA /* P3 */ = {
 			isa = PBXGroup;
 			children = (
-				B05D39422800114400DF0E6F /* MessageHelpers */,
+				B05D394B280114FB00DF0E6F /* Helpers */,
 				B05D393427FFF74800DF0E6F /* Utilities */,
 				B0B3F0E627F8E3F2005482B7 /* Components */,
 				B0B1B35927F6C3DD00D4DAAA /* Screens */,
@@ -189,10 +209,6 @@
 		B0B3F0E627F8E3F2005482B7 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				B0B3F0E727F8E45A005482B7 /* ImageSelect.swift */,
-				B05D393227FFF00200DF0E6F /* Variables.swift */,
-				B05D393A280008C400DF0E6F /* CurrentUser.swift */,
-				B05D3947280021F800DF0E6F /* NavigationHelper.swift */,
 				B05D394928006FA800DF0E6F /* messageCell.swift */,
 			);
 			path = Components;

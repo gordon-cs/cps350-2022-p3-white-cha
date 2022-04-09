@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct messageCell: View {
+    
+    @State var seen = false
+    
     var body: some View {
         HStack {
             Image(systemName: "person.fill")

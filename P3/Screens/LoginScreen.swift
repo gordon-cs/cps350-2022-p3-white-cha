@@ -8,21 +8,22 @@ import FirebaseFirestore
 struct LoginScreen: View {
     
     //used for screen tabbing
-    @State var isLoginMode = false
+    @State private var isLoginMode = false
     
     //used for credentials
-    @State var email = ""
-    @State var password = ""
-    @State var loginMessage = ""
+    @State private var email = ""
+    @State private var password = ""
+    @State private var loginMessage = ""
     
     //used for profile picture
-    @State var ShowImageSelect = false
-    @State var image: UIImage?
+    @State private var ShowImageSelect = false
+    @State private var image: UIImage?
     
     //login handler
-    @State var log_in = false
+//    @State private var log_in = false
 
-    
+    //checks if logged in
+    let didLogin: () -> ()
     
     var body: some View {
         NavigationView {
@@ -120,7 +121,7 @@ struct LoginScreen: View {
                             .ignoresSafeArea())
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .navigate(to: MessageView(), when: $log_in)
+//        .navigate(to: MessageView(), when: $log_in)
         
         // used for image selection
         .fullScreenCover(isPresented: $ShowImageSelect, onDismiss: nil) {
@@ -158,7 +159,8 @@ struct LoginScreen: View {
             
             print("logged into user: \(result?.user.uid ?? "" ) ")
             self.loginMessage = "logged into user: \(result?.user.uid ?? "" ) "
-            log_in.toggle()
+//            log_in.toggle()
+            self.didLogin()
             
         }
     }
@@ -167,6 +169,8 @@ struct LoginScreen: View {
      Create Account Function
      */
     private func createAcc() {
+
+        
         firebaseManager.shared.auth.createUser(withEmail: email, password: password) {
             result, e in
             if let e = e {
@@ -178,7 +182,6 @@ struct LoginScreen: View {
             print("created user: \(result?.user.uid ?? "" ) ")
             self.loginMessage = "created user: \(result?.user.uid ?? "" ) "
             self.ImageToStorage()
-            log_in.toggle()
         }
     }
     
@@ -234,6 +237,7 @@ struct LoginScreen: View {
                         return
                     }
                     print("stored in firestore")
+                    self.didLogin()
                 }
         }
     
@@ -242,6 +246,6 @@ struct LoginScreen: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginScreen()
+        LoginScreen(didLogin: {})
     }
 }
