@@ -14,27 +14,19 @@ import SwiftUI
 class MessageViewmodel: ObservableObject {
     @Published var msg = ""
     @Published var currentUser: CurrentUser?
+    @Published var isLoggedOut = false
     
     init() {
-//        login()
+        DispatchQueue.main.async {
+            self.isLoggedOut =
+            firebaseManager.shared.auth.currentUser?.uid == nil
+        }
         fetchCurrentUser()
+        
     }
-//    /*
-//     * temporary hard coded login
-//     */
-//    private func login() {
-//        firebaseManager.shared.auth.signIn(withEmail: "test@test.com", password: "testtest") {
-//            result, e in
-//            if let e = e {
-//                print("Failed to log into user:", e)
-//                return
-//            }
-//            print("logged into user: \(result?.user.uid ?? "" ) ")
-//        }
-//    }
-//
+
     
-    private func fetchCurrentUser() {
+    func fetchCurrentUser() {
 
         guard let uid = firebaseManager.shared.auth.currentUser?.uid else {
             self.msg = "Could not find firebase uid"
@@ -54,12 +46,16 @@ class MessageViewmodel: ObservableObject {
                 self.msg = "no data"
                 return
             }
-                        
-            let uid = data["uid"] as? String ?? ""
-            let email = data["email"] as? String ?? ""
-            let imgURL = data["imgURL"] as? String ?? ""
-            self.currentUser = CurrentUser(uid: uid, email: email, imgURL: imgURL)
+            
+            self.currentUser = .init(data: data)
         }
+    }
+    
+    
+    
+    func signOut() {
+        isLoggedOut.toggle()
+        try? firebaseManager.shared.auth.signOut()
     }
 }
 
@@ -139,12 +135,19 @@ struct MessageView: View {
                     print("dark mode : \(Variables.isDarkMode)")
                 }),
                 
-                .destructive(Text("Sign Out"), action: {
+                .destructive(Text("Log Out"), action: {
                     print("sign-out")
+                    viewmodel.signOut()
                 }),
                 
                 .cancel()
             ])
+        }
+        .fullScreenCover(isPresented: $viewmodel.isLoggedOut, onDismiss: nil) {
+            LoginScreen(didLogin: {
+                self.viewmodel.isLoggedOut = false
+                self.viewmodel.fetchCurrentUser()
+            })
         }
     }
 
