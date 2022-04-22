@@ -8,7 +8,7 @@
 import SwiftUI
 import CryptoKit
 
-struct ChatView: View {
+struct EncryptionDemo: View {
     @State var privateKey1: Curve25519.KeyAgreement.PrivateKey?
     @State var privateKey2: Curve25519.KeyAgreement.PrivateKey?
     @State var symmetricKey: SymmetricKey?
@@ -84,8 +84,8 @@ struct ChatView: View {
     }
 }
 
-struct ChatView_Previews: PreviewProvider {
+struct EncryptionDemo_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(displayedText: "Example", showKey1: false, showKey2: false, encrypted: false)
+        EncryptionDemo(displayedText: "Example", showKey1: false, showKey2: false, encrypted: false)
     }
 }
