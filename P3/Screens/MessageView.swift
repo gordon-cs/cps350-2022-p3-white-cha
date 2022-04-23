@@ -162,7 +162,7 @@ struct MessageView: View {
                 ScrollView {
                         ForEach(0..<2, id: \.self) { num in
                             NavigationLink {
-                                ChatView(displayedText: "Example", showKey1: false, showKey2: false, encrypted: false)
+                                ChatView()
                             } label: {
                                 messageCell()
                             }

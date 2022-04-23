@@ -6,86 +6,141 @@
 //
 
 import SwiftUI
-import CryptoKit
 
-struct ChatView: View {
-    @State var privateKey1: Curve25519.KeyAgreement.PrivateKey?
-    @State var privateKey2: Curve25519.KeyAgreement.PrivateKey?
-    @State var symmetricKey: SymmetricKey?
-    @State var displayedText: String
-    @State var showKey1: Bool
-    @State var showKey2: Bool
-    @State var encrypted: Bool
+struct WrappedTextView: UIViewRepresentable {
+    typealias UIViewType = UITextView
+    
+    @Binding var text: String
+    let textDidChange: (UITextView) -> Void
+    
+    func makeUIView(context: Context) -> UITextView {
+        let view = UITextView()
+        view.isEditable = true
+        view.delegate = context.coordinator
+        view.font = UIFont.systemFont(ofSize: 20)
+        return view
+    }
+    
+    func updateUIView(_ uiView: UITextView, context: Context) {
+        uiView.text = self.text
+        DispatchQueue.main.async {
+            self.textDidChange(uiView)
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(text: $text, textDidChange: textDidChange)
+    }
+    
+    class Coordinator: NSObject, UITextViewDelegate {
+        @Binding var text: String
+        let textDidChange: (UITextView) -> Void
+        
+        init(text: Binding<String>, textDidChange: @escaping (UITextView) -> Void) {
+            self._text = text
+            self.textDidChange = textDidChange
+        }
+        
+        func textViewDidChange(_ textView: UITextView) {
+            self.text = textView.text
+            self.textDidChange(textView)
+        }
+    }
+}
+
+struct ExpandingTextView: View {
+    @Binding var text: String
+    let minHeight: CGFloat = 50
+    @State private var textViewHeight: CGFloat?
     
     var body: some View {
+        WrappedTextView(text: $text, textDidChange: self.textDidChange)
+            .frame(height: textViewHeight ?? minHeight)
+            .cornerRadius(15)
+    }
+    
+    private func textDidChange(_ textView: UITextView) {
+        self.textViewHeight = max(textView.contentSize.height, minHeight)
+    }
+}
+
+struct FlippedUpsideDown: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .rotationEffect(.degrees(180))
+            .scaleEffect(x: -1, y: 1, anchor: .center)
+    }
+}
+
+extension View{
+    func flippedUpsideDown() -> some View {
+        self.modifier(FlippedUpsideDown())
+    }
+}
+
+
+
+struct ChatView: View {
+    @State private var message: String = ""
+    func handleSend () {
+        // TODO: HANDLE FIREBASE SEND
+        message = ""
+    }
+    var body: some View {
         VStack {
-            Button {
-                privateKey1 = generatePrivateKey()
-                print(privateKey1?.publicKey as Any)
-                showKey1 = true;
-            } label: {
-                Text("Generate new key")
+            ScrollView {
+                // Must pass items newest first. If the array is
+                // sorted from oldest to newest, index from last message
+                LazyVStack {
+                    ChatCell(text: "yo what up", sent: true)
+                        .flippedUpsideDown()
+                    ChatCell(text: "yo what up", sent: false)
+                        .flippedUpsideDown()
+                    ChatCell(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a suscipit tortor. Quisque eu mauris faucibus, tristique dolor a, feugiat ex. Sed volutpat justo sem, id lobortis ante hendrerit vitae. Pellentesque massa justo, molestie accumsan pulvinar feugiat, pretium eu nunc. Nunc feugiat dui ac felis facilisis molestie. Sed pellentesque nisi vel turpis iaculis imperdiet. Mauris facilisis sapien at nibh sagittis suscipit. Morbi at odio enim. Phasellus nec urna vitae elit congue posuere vitae a risus. Phasellus ac augue pharetra, suscipit enim sit amet, aliquam nulla. ", sent: false)
+                        .flippedUpsideDown()
+                    ChatCell(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a suscipit tortor. Quisque eu mauris faucibus, tristique dolor a, feugiat ex. Sed volutpat justo sem, id lobortis ante hendrerit vitae. Pellentesque massa justo, molestie accumsan pulvinar feugiat, pretium eu nunc. Nunc feugiat dui ac felis facilisis molestie. Sed pellentesque nisi vel turpis iaculis imperdiet. Mauris facilisis sapien at nibh sagittis suscipit. Morbi at odio enim. Phasellus nec urna vitae elit congue posuere vitae a risus. Phasellus ac augue pharetra, suscipit enim sit amet, aliquam nulla. ", sent: true)
+                        .flippedUpsideDown()
+                }
             }
-            .padding()
-            if (showKey1) {
+            .flippedUpsideDown()
+            HStack (alignment: .bottom) {
                 VStack {
-                    Text("User 1's Private Key")
-                    Text(exportPrivateKey(privateKey1!))
-                }
-                .padding()
-            }
-            Button {
-                privateKey2 = generatePrivateKey()
-                print(privateKey1?.publicKey as Any)
-                showKey2 = true;
-            } label: {
-                Text("Generate new key")
-            }
-            .padding()
-            if (showKey2) {
-                VStack {
-                    Text("User 2's Private Key")
-                    Text(exportPrivateKey(privateKey2!))
-                }
-                .padding()
-            }
-            Button {
-                do {
-                    symmetricKey = try deriveSymmetricKey(privateKey: (privateKey1)!, publicKey: privateKey2!.publicKey, salt: "bruh")
-                } catch {
-                    print("Symmetric key failure")
-                }
-                print(symmetricKey as Any)
-            } label: {
-                Text("Generate Symmetric Key")
-            }
-            .padding()
-            Button {
-                if (encrypted) {
-                    displayedText = decrypt(text: displayedText, symmetricKey: symmetricKey!)
-                    encrypted = false
-                } else {
-                    do {
-                        displayedText = try encrypt(text: displayedText, symmetricKey: symmetricKey!)
-                    } catch {
-                        print("encrypt error")
+                    Button {
+                        // TODO
+                    } label: {
+                        Image(systemName: "photo.on.rectangle")
+                            .font(.system(size: 30))
+                            .foregroundColor(Color(.white))
+                            .padding(.horizontal, 5)
                     }
-                    encrypted = true
                 }
                 
-            } label: {
-                Text("Encrypt/Decrypt")
+                ExpandingTextView(text: $message)
+                    .padding(.top, 8)
+                    .cornerRadius(15)
+                    .offset(y: 5)
+                VStack {
+                    Button {
+                        handleSend()
+                    } label: {
+                        Image("send")
+                            .renderingMode(.template)
+                            .font(.system(size: 30))
+                            .foregroundColor(Color(.white))
+                            .padding(.horizontal, 5)
+                    }
+                }
+                
             }
-            .padding()
+            .background(Color("secondary"))
+            .ignoresSafeArea()
             
-            
-            Text(displayedText)
         }
     }
 }
 
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(displayedText: "Example", showKey1: false, showKey2: false, encrypted: false)
+        ChatView()
     }
 }
