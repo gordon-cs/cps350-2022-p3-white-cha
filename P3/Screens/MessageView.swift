@@ -17,12 +17,25 @@ class MessageViewmodel: ObservableObject {
     @Published var isLoggedOut = false
     
     init() {
+        test()
         DispatchQueue.main.async {
             self.isLoggedOut =
             firebaseManager.shared.auth.currentUser?.uid == nil
         }
         fetchCurrentUser()
         
+    }
+    /*
+        AUTO LOG IN TEST ACCOUNT, COMMENT OUT TEST FUNCTION AND test() on line 20 for functionality
+     */
+    func test() {
+        firebaseManager.shared.auth.signIn(withEmail: "testing@testing.com", password: "testing") {
+            result, e in
+            if let e = e {
+                print("Failed to log into user:", e)
+                return
+            }
+        }
     }
 
     
@@ -65,6 +78,7 @@ struct MessageView: View {
     
     @ObservedObject private var viewmodel = MessageViewmodel()
     @State var logoutOptions = false
+    @State var showContacts = false
     
     //Custom Nav Bar
     var NavBar: some View {
@@ -150,6 +164,30 @@ struct MessageView: View {
             })
         }
     }
+    
+    private var newMessage: some View {
+        Button {
+            print("new message")
+            showContacts.toggle()
+        } label : {
+            HStack {
+                Spacer()
+                Text("+ New Message")
+                Spacer()
+            }
+            .foregroundColor(Color(.white))
+            
+            .padding(.vertical)
+                .background(Color(.systemGreen))
+                .cornerRadius(34)
+                .padding(.horizontal)
+            
+        }
+        .fullScreenCover(isPresented: $showContacts) {
+            createMessage()
+        }
+
+    }
 
     var body: some View {
         NavigationView{
@@ -178,22 +216,7 @@ struct MessageView: View {
                 
             }
             //new message button
-            .overlay(Button {
-                print("new message")
-            } label : {
-                HStack {
-                    Spacer()
-                    Text("+ New Message")
-                    Spacer()
-                }
-                .foregroundColor(Color(.white))
-                
-                .padding(.vertical)
-                    .background(Color(.systemGreen))
-                    .cornerRadius(34)
-                    .padding(.horizontal)
-                
-            }, alignment: .bottom)
+            .overlay(newMessage, alignment: .bottom)
             .navigationBarHidden(true)
             
         }

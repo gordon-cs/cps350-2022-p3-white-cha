@@ -8,7 +8,9 @@
 import Foundation
 
 
-struct CurrentUser {
+struct CurrentUser: Identifiable {
+    
+    var id: String { uid }
     let uid, email, imgURL: String
     
     init(data: [String: Any]) {
