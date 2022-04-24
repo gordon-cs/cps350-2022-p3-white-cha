@@ -178,18 +178,25 @@ struct MessageView: View {
             .foregroundColor(Color(.white))
             
             .padding(.vertical)
-                .background(Color(.systemGreen))
+                .background(Color("select"))
                 .cornerRadius(34)
                 .padding(.horizontal)
             
         }
         .fullScreenCover(isPresented: $showContacts) {
-            createMessage()
+            createMessage(didSelectUser: { user in
+                print(user.email)
+                self.shouldNavigateToChatView.toggle()
+                self.otherUser = user
+            })
         }
-
     }
+    @State var otherUser: CurrentUser?
 
+    
+    @State var shouldNavigateToChatView = false
     var body: some View {
+        
         NavigationView{
             
             VStack {
@@ -199,10 +206,14 @@ struct MessageView: View {
                 
                 ScrollView {
                         ForEach(0..<2, id: \.self) { num in
-                            NavigationLink {
-                                ChatView()
-                            } label: {
-                                messageCell()
+//                            NavigationLink {
+//                                ChatView()
+//                            } label: {
+//                                messageCell()
+//                            }
+                            messageCell()
+                            NavigationLink("", isActive: $shouldNavigateToChatView) {
+                                ChatView(otherUser: self.otherUser)
                             }
                             Divider()
                                 .padding(.vertical,8)

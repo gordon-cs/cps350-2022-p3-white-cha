@@ -39,6 +39,7 @@ class createMessageVM: ObservableObject {
 
 struct createMessage: View {
     
+    let didSelectUser: (CurrentUser) -> ()
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm = createMessageVM()
 
@@ -49,6 +50,7 @@ struct createMessage: View {
                 ForEach(vm.users) { user in
                     Button {
                         presentationMode.wrappedValue.dismiss()
+                        didSelectUser(user)
                     } label: {
                         HStack(spacing: 16) {
                             
