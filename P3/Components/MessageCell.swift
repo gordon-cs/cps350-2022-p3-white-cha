@@ -7,36 +7,46 @@
 
 import SwiftUI
 
+
+
+
 struct messageCell: View {
-    
+    let otherUser: CurrentUser?
     @State var seen = false
     
     var body: some View {
         HStack {
-            Image(systemName: "person.fill")
-                .foregroundColor(Color(.gray))
-                .font(.system(size: 30))
-                .padding(6)
-                .overlay(RoundedRectangle(cornerRadius: 30)
-                            .stroke(Color(.gray), lineWidth: 2)
-                )
+            AsyncImage(url: URL(string: otherUser?.imgURL ?? "")) { image in
+                image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 50, height: 50)
+                    .clipped()
+                    .cornerRadius(50)
+                
+                
+            } placeholder: {
+                Image(systemName: "person.fill")
+                    .font(.system(size:34))
+                    .foregroundColor(Color(.gray))
+                    .padding(7)
+            }
+            
+            
             VStack (alignment: .leading) {
-                Text("Sent name")
-                    .foregroundColor(Color(.black))
+                Text(otherUser?.email ?? "")
+                    .font(.system(size:20))
+                    .foregroundColor(Color("text"))
+                
                 Text("last message")
                     .foregroundColor(Color(.lightGray))
             }
             Spacer()
-            Text("last msg time")
-                .foregroundColor(Color(.black))
+            Text("20 min")
+                .foregroundColor(Color(.lightGray))
             
         }
         .padding(2)
     }
 }
 
-struct messageCell_Previews: PreviewProvider {
-    static var previews: some View {
-        messageCell()
-    }
-}

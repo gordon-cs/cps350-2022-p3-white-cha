@@ -20,6 +20,7 @@
 		B08F62D82814938700B646A6 /* createMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08F62D72814938700B646A6 /* createMessage.swift */; };
 		B08F62DA28150EA900B646A6 /* chatLogHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08F62D928150EA900B646A6 /* chatLogHelpers.swift */; };
 		B08F62DC2815317B00B646A6 /* MessageViewmodel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08F62DB2815317B00B646A6 /* MessageViewmodel.swift */; };
+		B08F62DE2816015100B646A6 /* CurrentMessagesViewmodel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08F62DD2816015100B646A6 /* CurrentMessagesViewmodel.swift */; };
 		B0B1B33027F6C38800D4DAAA /* P3App.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B1B32F27F6C38800D4DAAA /* P3App.swift */; };
 		B0B1B33427F6C38B00D4DAAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0B1B33327F6C38B00D4DAAA /* Assets.xcassets */; };
 		B0B1B33727F6C38B00D4DAAA /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0B1B33627F6C38B00D4DAAA /* Preview Assets.xcassets */; };
@@ -66,6 +67,7 @@
 		B08F62D72814938700B646A6 /* createMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createMessage.swift; sourceTree = "<group>"; };
 		B08F62D928150EA900B646A6 /* chatLogHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chatLogHelpers.swift; sourceTree = "<group>"; };
 		B08F62DB2815317B00B646A6 /* MessageViewmodel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewmodel.swift; sourceTree = "<group>"; };
+		B08F62DD2816015100B646A6 /* CurrentMessagesViewmodel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentMessagesViewmodel.swift; sourceTree = "<group>"; };
 		B0B1B32C27F6C38800D4DAAA /* P3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = P3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0B1B32F27F6C38800D4DAAA /* P3App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = P3App.swift; sourceTree = "<group>"; };
 		B0B1B33327F6C38B00D4DAAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				B0B3F0E727F8E45A005482B7 /* ImageSelect.swift */,
 				B05D393A280008C400DF0E6F /* CurrentUser.swift */,
 				B08F62DB2815317B00B646A6 /* MessageViewmodel.swift */,
+				B08F62DD2816015100B646A6 /* CurrentMessagesViewmodel.swift */,
 			);
 			path = FirebaseHelpers;
 			sourceTree = "<group>";
@@ -372,6 +375,7 @@
 				B05D393627FFF75800DF0E6F /* firebaseManager.swift in Sources */,
 				B0B1B35B27F6C45E00D4DAAA /* LoginScreen.swift in Sources */,
 				B05D393B280008C500DF0E6F /* CurrentUser.swift in Sources */,
+				B08F62DE2816015100B646A6 /* CurrentMessagesViewmodel.swift in Sources */,
 				B05D39442800118400DF0E6F /* Encryption.swift in Sources */,
 				B05D394A28006FA900DF0E6F /* MessageCell.swift in Sources */,
 				1E4CCC8B2810469F008F6E61 /* ChatCell.swift in Sources */,
