@@ -8,63 +8,11 @@
 import SwiftUI
 
 
-/*
- * Observable Object for firebase fetch
- */
-class MessageViewmodel: ObservableObject {
-    @Published var msg = ""
-    @Published var currentUser: CurrentUser?
-    @Published var isLoggedOut = false
-    
-    init() {
-        DispatchQueue.main.async {
-            self.isLoggedOut =
-            firebaseManager.shared.auth.currentUser?.uid == nil
-        }
-        fetchCurrentUser()
-        
-    }
-
-    
-    func fetchCurrentUser() {
-
-        guard let uid = firebaseManager.shared.auth.currentUser?.uid else {
-            self.msg = "Could not find firebase uid"
-            return
-        }
-        
-        self.msg = "\(uid)"
-
-        firebaseManager.shared.firestore.collection("users").document(uid).getDocument { snapshot, error in
-            if let error = error {
-                self.msg = "unable to fetch user: \(error)"
-                print("unable to fetch user:", error)
-                return
-            }
-
-            guard let data = snapshot?.data() else {
-                self.msg = "no data"
-                return
-            }
-            
-            self.currentUser = .init(data: data)
-        }
-    }
-    
-    
-    
-    func signOut() {
-        isLoggedOut.toggle()
-        try? firebaseManager.shared.auth.signOut()
-    }
-}
-
-
-
 struct MessageView: View {
     
     @ObservedObject private var viewmodel = MessageViewmodel()
     @State var logoutOptions = false
+    @State var showContacts = false
     
     //Custom Nav Bar
     var NavBar: some View {
@@ -150,8 +98,39 @@ struct MessageView: View {
             })
         }
     }
+    
+    private var newMessage: some View {
+        Button {
+            print("new message")
+            showContacts.toggle()
+        } label : {
+            HStack {
+                Spacer()
+                Text("+ New Message")
+                Spacer()
+            }
+            .foregroundColor(Color(.white))
+            
+            .padding(.vertical)
+                .background(Color("select"))
+                .cornerRadius(34)
+                .padding(.horizontal)
+            
+        }
+        .fullScreenCover(isPresented: $showContacts) {
+            createMessage(didSelectUser: { user in
+                print(user.email)
+                self.shouldNavigateToChatView.toggle()
+                self.otherUser = user
+            })
+        }
+    }
+    @State var otherUser: CurrentUser?
 
+    
+    @State var shouldNavigateToChatView = false
     var body: some View {
+        
         NavigationView{
             
             VStack {
@@ -161,10 +140,14 @@ struct MessageView: View {
                 
                 ScrollView {
                         ForEach(0..<2, id: \.self) { num in
-                            NavigationLink {
-                                ChatView()
-                            } label: {
-                                messageCell()
+//                            NavigationLink {
+//                                ChatView()
+//                            } label: {
+//                                messageCell()
+//                            }
+                            messageCell()
+                            NavigationLink("", isActive: $shouldNavigateToChatView) {
+                                ChatView(otherUser: self.otherUser)
                             }
                             Divider()
                                 .padding(.vertical,8)
@@ -178,22 +161,7 @@ struct MessageView: View {
                 
             }
             //new message button
-            .overlay(Button {
-                print("new message")
-            } label : {
-                HStack {
-                    Spacer()
-                    Text("+ New Message")
-                    Spacer()
-                }
-                .foregroundColor(Color(.white))
-                
-                .padding(.vertical)
-                    .background(Color(.systemGreen))
-                    .cornerRadius(34)
-                    .padding(.horizontal)
-                
-            }, alignment: .bottom)
+            .overlay(newMessage, alignment: .bottom)
             .navigationBarHidden(true)
             
         }

@@ -20,6 +20,7 @@ struct ChatCell: View {
                 .padding(.vertical, 5.0)
                 .offset(x: sent ? -2 : 1)
                 .fixedSize(horizontal: false, vertical: true)
+                .foregroundColor(Color("text"))
                 .background(
                     Image(sent ? "sent" : "received")
                         .resizable(capInsets: EdgeInsets(top: 17, leading: 21, bottom: 17, trailing: 21), resizingMode: .stretch)
