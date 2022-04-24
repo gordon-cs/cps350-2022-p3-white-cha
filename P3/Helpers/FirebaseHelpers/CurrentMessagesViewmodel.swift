@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 
 class currentMessageVM: ObservableObject {
@@ -18,7 +19,11 @@ class currentMessageVM: ObservableObject {
         fetchAllUsers()
     }
 
-    private func fetchAllUsers() {
+    func reload() {
+        users.removeAll()
+        fetchAllUsers()
+    }
+    func fetchAllUsers() {
         firebaseManager.shared.firestore.collection("users")
             .getDocuments { availableUsers, error in
                 if let error = error {

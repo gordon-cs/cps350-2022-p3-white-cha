@@ -11,8 +11,10 @@ import SwiftUI
 struct MessageView: View {
     
     @ObservedObject private var viewmodel = MessageViewmodel()
+    @ObservedObject var vm = currentMessageVM()
     @State var logoutOptions = false
     @State var showContacts = false
+    @State var refresh: Bool = false
     
     //Custom Nav Bar
     var NavBar: some View {
@@ -95,6 +97,7 @@ struct MessageView: View {
             LoginScreen(didLogin: {
                 self.viewmodel.isLoggedOut = false
                 self.viewmodel.fetchCurrentUser()
+                self.vm.reload()
             })
         }
     }
@@ -127,7 +130,6 @@ struct MessageView: View {
     }
     
     @State var otherUser: CurrentUser?
-    @ObservedObject var vm = createMessageVM()
     @State var shouldNavigateToChatView = false
     
     
