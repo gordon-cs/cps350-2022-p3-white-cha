@@ -168,6 +168,10 @@ struct LoginScreen: View {
      Create Account Function
      */
     private func createAcc() {
+        if (image == nil) {
+            loginMessage = "Please Set a Profile Picture"
+            return
+        }
 
         firebaseManager.shared.auth.createUser(withEmail: email, password: password) {
             result, e in
@@ -187,6 +191,7 @@ struct LoginScreen: View {
     
     //Moves selected image to firebase storage
     private func ImageToStorage() {
+        
         guard let uid = firebaseManager.shared.auth.currentUser?.uid
             else { return }
         guard let imgData = self.image?.jpegData(compressionQuality: 0.69)
