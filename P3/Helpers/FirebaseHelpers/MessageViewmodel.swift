@@ -16,7 +16,9 @@ class MessageViewmodel: ObservableObject {
     @Published var isLoggedOut = true
     
     init() {
+
 //        test()
+
         DispatchQueue.main.async {
             self.isLoggedOut =
             firebaseManager.shared.auth.currentUser?.uid == nil

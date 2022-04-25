@@ -4,6 +4,7 @@
 //
 //  Created by Amos Cha on 4/24/22.
 //
+
 import Foundation
 import SwiftUI
 
@@ -16,6 +17,7 @@ class ContactVM: ObservableObject {
     init() {
         //temporarily fetch all users
 //        fetchAllUsers()
+
     }
 
     func reload() {

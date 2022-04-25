@@ -11,10 +11,20 @@ import FirebaseDatabase
 struct ChatView: View {
     let otherUser: CurrentUser?
     @State private var message: String = ""
+    @State private var messageArr: Array<Dictionary<String, String>> = [[:]]
+    var ref: DatabaseReference = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child("messages")
     
-    func handleSend () {
-        // TODO: HANDLE FIREBASE SEND
+    func handleSend (uid: String) {
+        messageArr.insert(["sent": firebaseManager.shared.auth.currentUser!.uid, "message": message], at: 0)
+        ref.child(uid).setValue(messageArr)
+        firebaseManager.shared.RTDB.child("users").child(uid).child("messages").child(firebaseManager.shared.auth.currentUser!.uid).setValue(messageArr)
         message = ""
+    }
+    
+    func observeData(uid: String) {
+        ref.child(uid).observe(.value, with: {(snapshot) in
+            messageArr = snapshot.value as! Array<Dictionary<String, String>>
+        })
     }
     var body: some View {
 //        var refHandle = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child(otherUser!.uid).observe(DataEventType.value, with: { snapshot in
@@ -25,7 +35,11 @@ struct ChatView: View {
                 // Must pass items newest first. If the array is
                 // sorted from oldest to newest, index from last message
                 LazyVStack {
-                    
+
+                    ForEach(messageArr, id: \.self) { chats in
+                        ChatCell(text: chats["message"] ?? "", sent: firebaseManager.shared.auth.currentUser!.uid == chats["sent"]).flippedUpsideDown()
+                    }
+
                 }
                 .padding(.top,5)
             }
@@ -49,7 +63,7 @@ struct ChatView: View {
                     .offset(y: 5)
                 VStack {
                     Button {
-                        handleSend()
+                        handleSend(uid: otherUser!.uid)
                     } label: {
                         Image("send")
                             .renderingMode(.template)
@@ -65,7 +79,10 @@ struct ChatView: View {
             
         }
         .navigationTitle(otherUser?.email ?? "")
-            .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            observeData(uid: otherUser!.uid)
+        }
     }
 }
 
@@ -73,6 +90,6 @@ struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
         MessageView()
             .preferredColorScheme(Variables.isDarkMode ? .dark : .light)
-
+        
     }
 }

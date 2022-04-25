@@ -38,6 +38,9 @@ class createMessageVM: ObservableObject {
 
 func addContact(uid: String, vm: ContactVM) {
     let currentUid: String = firebaseManager.shared.auth.currentUser?.uid ?? ""
+
+    firebaseManager.shared.RTDB.updateChildValues(["/users/\(uid)/messages" : [currentUid: 0]])
+    firebaseManager.shared.RTDB.updateChildValues(["/users/\(currentUid)/messages" : [uid: 0]])
     firebaseManager.shared.firestore.collection("users")
         .document(currentUid).getDocument { snapshot, error in
             if let error = error {
