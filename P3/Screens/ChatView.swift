@@ -18,9 +18,9 @@ struct ChatView: View {
         message = ""
     }
     var body: some View {
-//        var refHandle = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child(otherUser!.uid).observe(DataEventType.value, with: { snapshot in
-//            print(snapshot)
-//          })
+        var refHandle = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child(otherUser!.uid).observe(DataEventType.value, with: { snapshot in
+            print(snapshot)
+          })
         VStack {
             ScrollView {
                 // Must pass items newest first. If the array is
