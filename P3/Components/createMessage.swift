@@ -37,8 +37,33 @@ class createMessageVM: ObservableObject {
     }
 }
 
+func addContact(uid: String, vm: ContactVM) {
+    let currentUid: String = firebaseManager.shared.auth.currentUser?.uid ?? ""
+    firebaseManager.shared.firestore.collection("users")
+        .document(currentUid).getDocument { snapshot, error in
+            if let error = error {
+                print("Failed to fetch user: \(error)")
+                return
+            }
+            var contacts = snapshot!.data()!["contacts"]! as! [Any]
+            contacts.append(uid)
+            firebaseManager.shared.firestore.collection("users").document(currentUid).updateData(["contacts": contacts])
+        }
+    firebaseManager.shared.firestore.collection("users")
+        .document(uid).getDocument { snapshot, error in
+            if let error = error {
+                print("Failed to fetch user: \(error)")
+                return
+            }
+            var contacts = snapshot!.data()!["contacts"]! as! [Any]
+            vm.users.append(.init(data: snapshot!.data()!))
+            contacts.append(currentUid)
+            firebaseManager.shared.firestore.collection("users").document(uid).updateData(["contacts": contacts])
+        }
+}
+
 struct createMessage: View {
-    
+    let contactVM: ContactVM
     let didSelectUser: (CurrentUser) -> ()
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm = createMessageVM()
@@ -49,11 +74,11 @@ struct createMessage: View {
             ScrollView {
                 ForEach(vm.users) { user in
                     Button {
+                        addContact(uid: user.uid, vm: contactVM)
                         presentationMode.wrappedValue.dismiss()
                         didSelectUser(user)
                     } label: {
                         HStack(spacing: 16) {
-                            
                             
                             AsyncImage(url: URL(string: user.imgURL ?? "")) { image in
                                 image
