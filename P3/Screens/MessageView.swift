@@ -11,8 +11,10 @@ import SwiftUI
 struct MessageView: View {
     
     @ObservedObject private var viewmodel = MessageViewmodel()
+    @ObservedObject var vm = currentMessageVM()
     @State var logoutOptions = false
     @State var showContacts = false
+    @State var refresh: Bool = false
     
     //Custom Nav Bar
     var NavBar: some View {
@@ -95,6 +97,7 @@ struct MessageView: View {
             LoginScreen(didLogin: {
                 self.viewmodel.isLoggedOut = false
                 self.viewmodel.fetchCurrentUser()
+                self.vm.reload()
             })
         }
     }
@@ -125,10 +128,11 @@ struct MessageView: View {
             })
         }
     }
-    @State var otherUser: CurrentUser?
-
     
+    @State var otherUser: CurrentUser?
     @State var shouldNavigateToChatView = false
+    
+    
     var body: some View {
         
         NavigationView{
@@ -139,22 +143,27 @@ struct MessageView: View {
                 NavBar
                 
                 ScrollView {
-                        ForEach(0..<2, id: \.self) { num in
-//                            NavigationLink {
-//                                ChatView()
-//                            } label: {
-//                                messageCell()
-//                            }
-                            messageCell()
-                            NavigationLink("", isActive: $shouldNavigateToChatView) {
-                                ChatView(otherUser: self.otherUser)
-                            }
+                    ForEach(vm.users) { user in
+
+                        Button {
+                            otherUser = user
+                            shouldNavigateToChatView.toggle()
+                        } label : {
+                            messageCell(otherUser: user)
+                        }
+                        
+                        NavigationLink("", isActive: $shouldNavigateToChatView) {
+                            ChatView(otherUser: self.otherUser)
+                        }
+                            
+                            
                             Divider()
                                 .padding(.vertical,8)
                         }
                         
                     }
                     .padding(.horizontal)
+                    .padding(.bottom,50)
                 
                 
                 
@@ -173,5 +182,6 @@ struct MessageView: View {
 struct MessageView_Previews: PreviewProvider {
     static var previews: some View {
         MessageView()
+            .preferredColorScheme(Variables.isDarkMode ? .dark : .light)
     }
 }

@@ -170,7 +170,6 @@ struct LoginScreen: View {
      */
     private func createAcc() {
 
-        
         firebaseManager.shared.auth.createUser(withEmail: email, password: password) {
             result, e in
             if let e = e {
@@ -188,15 +187,15 @@ struct LoginScreen: View {
     
     //Moves selected image to firebase storage
     private func ImageToStorage() {
-        
+        print(1)
         guard let uid = firebaseManager.shared.auth.currentUser?.uid
             else { return }
-        
+        print(2)
         guard let imgData = self.image?.jpegData(compressionQuality: 0.69)
             else { return }
-        
+        print(3)
         let reference = firebaseManager.shared.storage.reference(withPath: uid)
-        
+        print(4)
         
         reference.putData(imgData, metadata: nil) { metadata, error in
             if let error = error {
@@ -223,6 +222,7 @@ struct LoginScreen: View {
     
         private func storeUserInfo(imgURL: URL) {
             
+            
             guard let uid = firebaseManager.shared.auth.currentUser?.uid else {
                 return
             }
@@ -247,5 +247,6 @@ struct LoginScreen: View {
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         LoginScreen(didLogin: {})
+            .preferredColorScheme(Variables.isDarkMode ? .dark : .light)
     }
 }

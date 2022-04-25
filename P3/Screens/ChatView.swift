@@ -76,5 +76,7 @@ struct ChatView: View {
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
         MessageView()
+            .preferredColorScheme(Variables.isDarkMode ? .dark : .light)
+
     }
 }

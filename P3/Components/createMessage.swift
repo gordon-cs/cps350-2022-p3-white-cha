@@ -101,9 +101,3 @@ struct createMessage: View {
     }
 }
 
-struct createMessage_Previews: PreviewProvider {
-    static var previews: some View {
-//        createMessage()
-        MessageView()
-    }
-}
