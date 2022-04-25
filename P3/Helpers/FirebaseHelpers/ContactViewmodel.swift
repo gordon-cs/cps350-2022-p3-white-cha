@@ -16,7 +16,8 @@ class ContactVM: ObservableObject {
 
     init() {
         //temporarily fetch all users
-        // fetchAllUsers()
+//        fetchAllUsers()
+
     }
 
     func reload() {

@@ -4,7 +4,6 @@
 //
 //  Created by Silas White on 4/7/22.
 //
-
 import SwiftUI
 import FirebaseDatabase
 
@@ -28,14 +27,19 @@ struct ChatView: View {
         })
     }
     var body: some View {
+//        var refHandle = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child(otherUser!.uid).observe(DataEventType.value, with: { snapshot in
+//            print(snapshot)
+//          })
         VStack {
             ScrollView {
                 // Must pass items newest first. If the array is
                 // sorted from oldest to newest, index from last message
                 LazyVStack {
+
                     ForEach(messageArr, id: \.self) { chats in
                         ChatCell(text: chats["message"] ?? "", sent: firebaseManager.shared.auth.currentUser!.uid == chats["sent"]).flippedUpsideDown()
                     }
+
                 }
                 .padding(.top,5)
             }

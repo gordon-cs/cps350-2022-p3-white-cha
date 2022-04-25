@@ -16,7 +16,9 @@ class MessageViewmodel: ObservableObject {
     @Published var isLoggedOut = true
     
     init() {
-        // test()
+
+//        test()
+
         DispatchQueue.main.async {
             self.isLoggedOut =
             firebaseManager.shared.auth.currentUser?.uid == nil
@@ -24,6 +26,12 @@ class MessageViewmodel: ObservableObject {
         fetchCurrentUser()
         
     }
+    
+    func reload() {
+        fetchCurrentUser()
+    }
+    
+    
     /*
         AUTO LOG IN TEST ACCOUNT, COMMENT OUT TEST FUNCTION AND test() on line 20 for functionality
      */
