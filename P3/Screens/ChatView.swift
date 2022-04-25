@@ -4,8 +4,8 @@
 //
 //  Created by Silas White on 4/7/22.
 //
-
 import SwiftUI
+import FirebaseDatabase
 
 
 struct ChatView: View {
@@ -17,19 +17,15 @@ struct ChatView: View {
         message = ""
     }
     var body: some View {
+//        var refHandle = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child(otherUser!.uid).observe(DataEventType.value, with: { snapshot in
+//            print(snapshot)
+//          })
         VStack {
             ScrollView {
                 // Must pass items newest first. If the array is
                 // sorted from oldest to newest, index from last message
                 LazyVStack {
-                    ChatCell(text: "yo what up", sent: true)
-                        .flippedUpsideDown()
-                    ChatCell(text: "yo what up", sent: false)
-                        .flippedUpsideDown()
-                    ChatCell(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a suscipit tortor. Quisque eu mauris faucibus, tristique dolor a, feugiat ex. Sed volutpat justo sem, id lobortis ante hendrerit vitae. Pellentesque massa justo, molestie accumsan pulvinar feugiat, pretium eu nunc. Nunc feugiat dui ac felis facilisis molestie. Sed pellentesque nisi vel turpis iaculis imperdiet. Mauris facilisis sapien at nibh sagittis suscipit. Morbi at odio enim. Phasellus nec urna vitae elit congue posuere vitae a risus. Phasellus ac augue pharetra, suscipit enim sit amet, aliquam nulla. ", sent: false)
-                        .flippedUpsideDown()
-                    ChatCell(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris a suscipit tortor. Quisque eu mauris faucibus, tristique dolor a, feugiat ex. Sed volutpat justo sem, id lobortis ante hendrerit vitae. Pellentesque massa justo, molestie accumsan pulvinar feugiat, pretium eu nunc. Nunc feugiat dui ac felis facilisis molestie. Sed pellentesque nisi vel turpis iaculis imperdiet. Mauris facilisis sapien at nibh sagittis suscipit. Morbi at odio enim. Phasellus nec urna vitae elit congue posuere vitae a risus. Phasellus ac augue pharetra, suscipit enim sit amet, aliquam nulla. ", sent: true)
-                        .flippedUpsideDown()
+                    
                 }
                 .padding(.top,5)
             }

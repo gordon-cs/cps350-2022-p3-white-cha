@@ -4,17 +4,65 @@
 //
 //  Created by Amos Cha on 4/4/22.
 //
-
 import SwiftUI
 
 
 struct MessageView: View {
     
     @ObservedObject private var viewmodel = MessageViewmodel()
-    @ObservedObject var vm = currentMessageVM()
+    @ObservedObject var vm = ContactVM()
     @State var logoutOptions = false
     @State var showContacts = false
-    @State var refresh: Bool = false
+    
+    @State private var ShowImageSelect = false
+    @State private var image: UIImage?
+    @State private var imageURL = ""
+    
+    
+    func saveProfilePicture(img : UIImage?) {
+        if(img != nil) {
+            guard let uid = firebaseManager.shared.auth.currentUser?.uid
+                else { return }
+            guard let imgData = img?.jpegData(compressionQuality: 0.69)
+                else { return }
+            let reference = firebaseManager.shared.storage.reference(withPath: uid)
+            
+            reference.putData(imgData, metadata: nil) { metadata, error in
+                if let error = error {
+                    print(error)
+                    return
+                }
+                
+                reference.downloadURL { url, error in
+                    if let error = error {
+                        print(error)
+                        return
+                    }
+
+                    guard let url = url else { return }
+                    imageURL = url.absoluteString
+                    
+                    let userData: [String: Any] = ["imgURL": url.absoluteString]
+                    
+                    firebaseManager.shared.firestore.collection("users")
+                        .document( uid ).updateData(userData) { error in
+                            if let error = error {
+                                print(error)
+                                return
+                            }
+
+                        }
+
+                }
+            }
+            
+        } else {
+            print("did not save profile picture")
+            return
+        }
+
+        
+    }
     
     //Custom Nav Bar
     var NavBar: some View {
@@ -25,8 +73,9 @@ struct MessageView: View {
             VStack {
                 Button {
                     //change profile picture button
+                    ShowImageSelect.toggle()
                 } label: {
-                    AsyncImage(url: URL(string: viewmodel.currentUser?.imgURL ?? "")) { image in
+                    AsyncImage(url: URL(string: imageURL == "" ? viewmodel.currentUser?.imgURL ?? "" : imageURL)) { image in
                         image
                             .resizable()
                             .scaledToFill()
@@ -121,7 +170,7 @@ struct MessageView: View {
             
         }
         .fullScreenCover(isPresented: $showContacts) {
-            createMessage(didSelectUser: { user in
+            createMessage(contactVM: vm, didSelectUser: { user in
                 print(user.email)
                 self.shouldNavigateToChatView.toggle()
                 self.otherUser = user
@@ -169,6 +218,15 @@ struct MessageView: View {
                 
                 
             }
+            // used for image selection
+            .fullScreenCover(isPresented: $ShowImageSelect, onDismiss: {
+                saveProfilePicture(img : image)
+            })
+            {
+                //Text("test")
+                ImageSelect(image: $image)
+                
+            }
             //new message button
             .overlay(newMessage, alignment: .bottom)
             .navigationBarHidden(true)
@@ -179,9 +237,10 @@ struct MessageView: View {
     
 }
 
+
+
 struct MessageView_Previews: PreviewProvider {
     static var previews: some View {
         MessageView()
-            .preferredColorScheme(Variables.isDarkMode ? .dark : .light)
     }
 }

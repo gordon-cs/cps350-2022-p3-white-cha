@@ -21,7 +21,6 @@ struct LoginScreen: View {
     
     //login handler
 //    @State private var log_in = false
-
     //checks if logged in
     let didLogin: () -> ()
     
@@ -179,6 +178,7 @@ struct LoginScreen: View {
             }
             
             print("created user: \(result?.user.uid ?? "" ) ")
+            firebaseManager.shared.RTDB.updateChildValues(["/users/\(result!.user.uid)" : ["messages": 0]])
             self.loginMessage = "created user: \(result?.user.uid ?? "" ) "
             self.ImageToStorage()
         }
@@ -187,15 +187,11 @@ struct LoginScreen: View {
     
     //Moves selected image to firebase storage
     private func ImageToStorage() {
-        print(1)
         guard let uid = firebaseManager.shared.auth.currentUser?.uid
             else { return }
-        print(2)
         guard let imgData = self.image?.jpegData(compressionQuality: 0.69)
             else { return }
-        print(3)
         let reference = firebaseManager.shared.storage.reference(withPath: uid)
-        print(4)
         
         reference.putData(imgData, metadata: nil) { metadata, error in
             if let error = error {
@@ -227,7 +223,7 @@ struct LoginScreen: View {
                 return
             }
             
-            let userData = ["email": self.email, "uid": uid, "imgURL": imgURL.absoluteString]
+            let userData: [String: Any] = ["email": self.email, "uid": uid, "imgURL": imgURL.absoluteString, "contacts": []]
             
             firebaseManager.shared.firestore.collection("users")
                 .document( uid ).setData(userData) { error in
