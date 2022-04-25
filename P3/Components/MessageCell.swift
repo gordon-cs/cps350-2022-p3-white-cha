@@ -11,7 +11,7 @@ import SwiftUI
 
 
 struct messageCell: View {
-    let otherUser: CurrentUser?
+    let otherUser: User?
     @State var seen = false
     
     var body: some View {

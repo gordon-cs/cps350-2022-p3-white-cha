@@ -7,7 +7,7 @@
 import Foundation
 
 
-struct CurrentUser: Identifiable {
+struct User: Identifiable {
     
     var id: String { uid }
     let uid, email, imgURL: String
@@ -20,5 +20,17 @@ struct CurrentUser: Identifiable {
         self.imgURL = data["imgURL"] as? String ?? ""
         self.contacts = data["contacts"] as? Array<Any> ?? []
         
+    }
+}
+
+
+struct RecentInformation: Identifiable {
+    var id: String { uid }
+    let uid, lastMessage, lastTime: String
+    
+    init(data: [String: Any]) {
+        self.uid = data["uid"] as? String ?? ""
+        self.lastTime = data["lastTine"] as? String ?? ""
+        self.lastMessage = data["lastMessage"] as? String ?? ""
     }
 }

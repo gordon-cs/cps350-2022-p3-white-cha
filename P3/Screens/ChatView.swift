@@ -9,7 +9,7 @@ import FirebaseDatabase
 
 
 struct ChatView: View {
-    let otherUser: CurrentUser?
+    let otherUser: User?
     @State private var message: String = ""
     @State private var messageArr: Array<Dictionary<String, String>> = [[:]]
     var ref: DatabaseReference = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child("messages")

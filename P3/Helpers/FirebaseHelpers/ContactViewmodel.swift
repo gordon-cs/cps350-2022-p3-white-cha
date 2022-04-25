@@ -11,7 +11,8 @@ import SwiftUI
 
 class ContactVM: ObservableObject {
 
-    @Published var users = [CurrentUser]()
+    @Published var users = [User]()
+    @Published var recents = [RecentInformation]()
     @Published var errorMessage = ""
 
     init() {
@@ -43,7 +44,7 @@ class ContactVM: ObservableObject {
                             guard let data = snapshot?.data() else {
                                 return
                             }
-                            let user = CurrentUser(data: data)
+                            let user = User(data: data)
                             if user.uid != firebaseManager.shared.auth.currentUser?.uid {
                                 self.users.append(.init(data: data))
                             }

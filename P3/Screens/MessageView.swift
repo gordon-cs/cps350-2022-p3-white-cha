@@ -179,7 +179,7 @@ struct MessageView: View {
         }
     }
     
-    @State var otherUser: CurrentUser?
+    @State var otherUser: User?
     @State var shouldNavigateToChatView = false
     
     

@@ -9,7 +9,7 @@ import SwiftUI
 
 class createMessageVM: ObservableObject {
 
-    @Published var users = [CurrentUser]()
+    @Published var users = [User]()
     @Published var errorMessage = ""
 
     init() {
@@ -26,7 +26,7 @@ class createMessageVM: ObservableObject {
 
                 availableUsers?.documents.forEach({ snapshot in
                     let data = snapshot.data()
-                    let user = CurrentUser(data: data)
+                    let user = User(data: data)
                     if user.uid != firebaseManager.shared.auth.currentUser?.uid {
                         self.users.append(.init(data: data))
                     }
@@ -66,7 +66,7 @@ func addContact(uid: String, vm: ContactVM) {
 
 struct createMessage: View {
     let contactVM: ContactVM
-    let didSelectUser: (CurrentUser) -> ()
+    let didSelectUser: (User) -> ()
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm = createMessageVM()
 
