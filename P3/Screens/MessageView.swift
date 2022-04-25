@@ -11,7 +11,7 @@ import SwiftUI
 struct MessageView: View {
     
     @ObservedObject private var viewmodel = MessageViewmodel()
-    @ObservedObject var vm = currentMessageVM()
+    @ObservedObject var vm = ContactVM()
     @State var logoutOptions = false
     @State var showContacts = false
     @State var refresh: Bool = false
@@ -121,7 +121,7 @@ struct MessageView: View {
             
         }
         .fullScreenCover(isPresented: $showContacts) {
-            createMessage(didSelectUser: { user in
+            createMessage(contactVM: vm, didSelectUser: { user in
                 print(user.email)
                 self.shouldNavigateToChatView.toggle()
                 self.otherUser = user

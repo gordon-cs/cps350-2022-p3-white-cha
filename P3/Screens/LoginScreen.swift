@@ -179,6 +179,7 @@ struct LoginScreen: View {
             }
             
             print("created user: \(result?.user.uid ?? "" ) ")
+            firebaseManager.shared.RTDB.updateChildValues(["/users/\(result!.user.uid)" : ["messages": 0]])
             self.loginMessage = "created user: \(result?.user.uid ?? "" ) "
             self.ImageToStorage()
         }
@@ -227,7 +228,7 @@ struct LoginScreen: View {
                 return
             }
             
-            let userData = ["email": self.email, "uid": uid, "imgURL": imgURL.absoluteString]
+            let userData: [String: Any] = ["email": self.email, "uid": uid, "imgURL": imgURL.absoluteString, "contacts": []]
             
             firebaseManager.shared.firestore.collection("users")
                 .document( uid ).setData(userData) { error in
