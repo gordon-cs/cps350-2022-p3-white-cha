@@ -24,6 +24,7 @@ class ContactVM: ObservableObject {
         users.removeAll()
         fetchAllUsers()
     }
+    
     func fetchAllUsers() {
         let uid: String = firebaseManager.shared.auth.currentUser?.uid  ?? ""
         firebaseManager.shared.firestore.collection("users")

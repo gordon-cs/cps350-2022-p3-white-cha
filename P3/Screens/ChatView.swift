@@ -23,7 +23,7 @@ struct ChatView: View {
     
     func observeData(uid: String) {
         ref.child(uid).observe(.value, with: {(snapshot) in
-            messageArr = snapshot.value as! Array<Dictionary<String, String>>
+            messageArr = snapshot.value as? Array<Dictionary<String, String>> ?? [[:]]
         })
     }
     var body: some View {
