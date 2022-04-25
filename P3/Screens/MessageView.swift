@@ -136,6 +136,7 @@ struct MessageView: View {
                 
                 .destructive(Text("Log Out"), action: {
                     print("sign-out")
+                    imageURL = ""
                     viewmodel.signOut()
                 }),
                 
