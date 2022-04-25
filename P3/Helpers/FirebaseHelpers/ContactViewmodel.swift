@@ -16,7 +16,7 @@ class ContactVM: ObservableObject {
 
     init() {
         //temporarily fetch all users
-        fetchAllUsers()
+        // fetchAllUsers()
     }
 
     func reload() {
@@ -31,18 +31,20 @@ class ContactVM: ObservableObject {
                     print("Failed to fetch user: \(error)")
                     return
                 }
-                let contacts = snapshot!.data()!["contacts"]! as! Array<String>
-                contacts.forEach({contactUid in
+                let contacts = snapshot?.data()?["contacts"] as? Array<String>
+                contacts?.forEach({contactUid in
                     firebaseManager.shared.firestore.collection("users")
                         .document(contactUid).getDocument { snapshot, error in
                             if let error = error {
                                 print("Failed to fetch user: \(error)")
                                 return
                             }
-                            let data = snapshot!.data()
-                            let user = CurrentUser(data: data!)
+                            guard let data = snapshot?.data() else {
+                                return
+                            }
+                            let user = CurrentUser(data: data)
                             if user.uid != firebaseManager.shared.auth.currentUser?.uid {
-                                self.users.append(.init(data: data!))
+                                self.users.append(.init(data: data))
                             }
                         }
                 })

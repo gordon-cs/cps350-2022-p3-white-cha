@@ -13,7 +13,7 @@ import Foundation
 class MessageViewmodel: ObservableObject {
     @Published var msg = ""
     @Published var currentUser: CurrentUser?
-    @Published var isLoggedOut = false
+    @Published var isLoggedOut = true
     
     init() {
         // test()
