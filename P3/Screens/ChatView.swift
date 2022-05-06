@@ -12,7 +12,7 @@ struct ChatView: View {
     let otherUser: CurrentUser?
     @State private var message: String = ""
     @State private var messageArr: Array<Dictionary<String, String>> = [[:]]
-    var ref: DatabaseReference = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child("messages")
+    private var ref: DatabaseReference = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child("messages")
     
     func handleSend (uid: String) {
         messageArr.insert(["sent": firebaseManager.shared.auth.currentUser!.uid, "message": message], at: 0)
@@ -21,15 +21,12 @@ struct ChatView: View {
         message = ""
     }
     
-    func observeData(uid: String) {
+    private func observeData(uid: String) {
         ref.child(uid).observe(.value, with: {(snapshot) in
             messageArr = snapshot.value as? Array<Dictionary<String, String>> ?? [[:]]
         })
     }
     var body: some View {
-//        var refHandle = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child(otherUser!.uid).observe(DataEventType.value, with: { snapshot in
-//            print(snapshot)
-//          })
         VStack {
             ScrollView {
                 // Must pass items newest first. If the array is

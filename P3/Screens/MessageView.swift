@@ -5,12 +5,12 @@
 //  Created by Amos Cha on 4/4/22.
 //
 import SwiftUI
+import FirebaseDatabase
 
 
 struct MessageView: View {
     
     @ObservedObject private var viewmodel = MessageViewmodel()
-    @ObservedObject var vm = ContactVM()
     @State var logoutOptions = false
     @State var showContacts = false
     
@@ -137,7 +137,6 @@ struct MessageView: View {
                 .destructive(Text("Log Out"), action: {
                     print("sign-out")
                     imageURL = ""
-                    vm.users.removeAll()
                     viewmodel.signOut()
                     
                 }),
@@ -149,7 +148,6 @@ struct MessageView: View {
             LoginScreen(didLogin: {
                 self.viewmodel.isLoggedOut = false
                 self.viewmodel.fetchCurrentUser()
-                self.vm.reload()
             })
         }
     }
@@ -173,7 +171,7 @@ struct MessageView: View {
             
         }
         .fullScreenCover(isPresented: $showContacts) {
-            createMessage(contactVM: vm, didSelectUser: { user in
+            createMessage(didSelectUser: { user in
                 print(user.email)
                 self.shouldNavigateToChatView.toggle()
                 self.otherUser = user
@@ -184,6 +182,15 @@ struct MessageView: View {
     @State var otherUser: CurrentUser?
     @State var shouldNavigateToChatView = false
     
+    @State var contactArray: Array<CurrentUser> = []
+    
+    private var ref: DatabaseReference = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child("contacts")
+    
+    private func observeData(uid: String) {
+        ref.child(uid).observe(.value, with: {(snapshot) in
+            contactArray = snapshot.value as? Array<String> ?? []
+        })
+    }
     
     var body: some View {
         
