@@ -12,7 +12,7 @@ struct ChatView: View {
     let otherUser: CurrentUser?
     @State private var message: String = ""
     @State private var messageArr: Array<Dictionary<String, String>> = [[:]]
-    private var ref: DatabaseReference = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child("messages")
+    var ref: DatabaseReference = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child("messages")
     
     func handleSend (uid: String) {
         messageArr.insert(["sent": firebaseManager.shared.auth.currentUser!.uid, "message": message], at: 0)

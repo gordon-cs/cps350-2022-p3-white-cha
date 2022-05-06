@@ -60,14 +60,10 @@ struct createMessage: View {
         firebaseManager.shared.RTDB.updateChildValues(["/users/\(currentUid)/messages" : [uid: 0]])
         contactArray.insert(uid, at: 0)
         ref.child(firebaseManager.shared.auth.currentUser!.uid).child("contacts").setValue(contactArray)
-        ref.child(uid).child("contacts").getData(completion:  { error, snapshot in
-            guard error == nil else {
-                print(error!.localizedDescription)
-                return;
-            }
+        ref.child(uid).child("contacts").getData(completion:  {error, snapshot in
             var otherContactArray = snapshot.value as? Array<String> ?? [];
             otherContactArray.insert(firebaseManager.shared.auth.currentUser!.uid, at: 0)
-            ref.child(firebaseManager.shared.auth.currentUser!.uid).child("contacts").setValue(otherContactArray)
+            ref.child(uid).child("contacts").setValue(otherContactArray)
         });
     }
     
