@@ -129,10 +129,6 @@ struct MessageView: View {
         .padding()
         .actionSheet(isPresented: $logoutOptions) {
             .init(title: Text("Settings"), message: Text("Available Options"), buttons: [
-//                .default(Text(Variables.isDarkMode ? "Toggle Light Mode" : "Toggle Dark Mode"), action: {
-//                    Variables.isDarkMode.toggle()
-//                    print("dark mode : \(Variables.isDarkMode)")
-//                }),
                 .default(Text("Change Profile Picture"), action: {
                     ShowImageSelect.toggle()
                 }),
