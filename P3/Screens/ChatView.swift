@@ -21,15 +21,12 @@ struct ChatView: View {
         message = ""
     }
     
-    func observeData(uid: String) {
+    private func observeData(uid: String) {
         ref.child(uid).observe(.value, with: {(snapshot) in
             messageArr = snapshot.value as? Array<Dictionary<String, String>> ?? [[:]]
         })
     }
     var body: some View {
-//        var refHandle = firebaseManager.shared.RTDB.child("users").child(firebaseManager.shared.auth.currentUser!.uid).child(otherUser!.uid).observe(DataEventType.value, with: { snapshot in
-//            print(snapshot)
-//          })
         VStack {
             ScrollView {
                 // Must pass items newest first. If the array is

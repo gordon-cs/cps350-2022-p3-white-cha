@@ -5,6 +5,7 @@
 //  Created by Amos Cha on 4/23/22.
 //
 import SwiftUI
+import FirebaseDatabase
 
 
 class createMessageVM: ObservableObject {
@@ -15,6 +16,7 @@ class createMessageVM: ObservableObject {
     init() {
         fetchAllUsers()
     }
+
 
     private func fetchAllUsers() {
         firebaseManager.shared.firestore.collection("users")
@@ -36,47 +38,41 @@ class createMessageVM: ObservableObject {
     }
 }
 
-func addContact(uid: String, vm: ContactVM) {
-    let currentUid: String = firebaseManager.shared.auth.currentUser?.uid ?? ""
-
-    firebaseManager.shared.RTDB.updateChildValues(["/users/\(uid)/messages" : [currentUid: 0]])
-    firebaseManager.shared.RTDB.updateChildValues(["/users/\(currentUid)/messages" : [uid: 0]])
-    firebaseManager.shared.firestore.collection("users")
-        .document(currentUid).getDocument { snapshot, error in
-            if let error = error {
-                print("Failed to fetch user: \(error)")
-                return
-            }
-            var contacts = snapshot!.data()!["contacts"]! as! [Any]
-            contacts.append(uid)
-            firebaseManager.shared.firestore.collection("users").document(currentUid).updateData(["contacts": contacts])
-        }
-    firebaseManager.shared.firestore.collection("users")
-        .document(uid).getDocument { snapshot, error in
-            if let error = error {
-                print("Failed to fetch user: \(error)")
-                return
-            }
-            var contacts = snapshot!.data()!["contacts"]! as! [Any]
-            vm.users.append(.init(data: snapshot!.data()!))
-            contacts.append(currentUid)
-            firebaseManager.shared.firestore.collection("users").document(uid).updateData(["contacts": contacts])
-        }
-}
-
 struct createMessage: View {
-    let contactVM: ContactVM
     let didSelectUser: (CurrentUser) -> ()
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var vm = createMessageVM()
+    
+    @State var contactArray: Array<String> = []
 
-     
+    var ref: DatabaseReference = firebaseManager.shared.RTDB.child("users")
+
+    private func observeData() {
+        ref.child(firebaseManager.shared.auth.currentUser!.uid).child("contacts").observe(.value, with: {(snapshot) in
+            contactArray = snapshot.value as? Array<String> ?? []
+        })
+    }
+    
+    
+    func addContact(uid: String) {
+        let currentUid: String = firebaseManager.shared.auth.currentUser?.uid ?? ""
+        firebaseManager.shared.RTDB.updateChildValues(["/users/\(uid)/messages" : [currentUid: 0]])
+        firebaseManager.shared.RTDB.updateChildValues(["/users/\(currentUid)/messages" : [uid: 0]])
+        contactArray.insert(uid, at: 0)
+        ref.child(firebaseManager.shared.auth.currentUser!.uid).child("contacts").setValue(contactArray)
+        ref.child(uid).child("contacts").getData(completion:  {error, snapshot in
+            var otherContactArray = snapshot.value as? Array<String> ?? [];
+            otherContactArray.insert(firebaseManager.shared.auth.currentUser!.uid, at: 0)
+            ref.child(uid).child("contacts").setValue(otherContactArray)
+        });
+    }
+    
     var body: some View {
         NavigationView {
             ScrollView {
                 ForEach(vm.users) { user in
                     Button {
-                        addContact(uid: user.uid, vm: contactVM)
+                        addContact(uid: user.uid)
                         presentationMode.wrappedValue.dismiss()
                         didSelectUser(user)
                     } label: {
@@ -124,6 +120,9 @@ struct createMessage: View {
                     }
                        
                 }
+        }
+        .onAppear{
+            observeData()
         }
     }
 }
