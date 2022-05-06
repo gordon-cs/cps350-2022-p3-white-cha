@@ -17,6 +17,7 @@ struct LoginScreen: View {
     
     //used for profile picture
     @State private var ShowImageSelect = false
+    @State private var didSelectImage = false
     @State private var image: UIImage?
     
     //login handler
@@ -65,6 +66,12 @@ struct LoginScreen: View {
                                         .stroke(Color.gray, lineWidth: 2)
                             )
                         }
+                        Text(
+                            image == nil ? "Select a Profile Picture" : ""
+                        )
+                        
+                            .font(.system(size: 14))
+                            .foregroundColor(Color(.gray))
                     }
                     // End of Profile Pic
                     

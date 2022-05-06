@@ -104,9 +104,9 @@ struct MessageView: View {
                 
                 HStack {
                     Circle()
-                        .foregroundColor(Color(.lightGray))
+                        .foregroundColor(Color("select"))
                         .frame(width: 14, height: 14)
-                    Text("online_status")
+                    Text("online")
                         .font(.system(size: 14))
                 }
                 
@@ -129,9 +129,12 @@ struct MessageView: View {
         .padding()
         .actionSheet(isPresented: $logoutOptions) {
             .init(title: Text("Settings"), message: Text("Available Options"), buttons: [
-                .default(Text(Variables.isDarkMode ? "Toggle Light Mode" : "Toggle Dark Mode"), action: {
-                    Variables.isDarkMode.toggle()
-                    print("dark mode : \(Variables.isDarkMode)")
+//                .default(Text(Variables.isDarkMode ? "Toggle Light Mode" : "Toggle Dark Mode"), action: {
+//                    Variables.isDarkMode.toggle()
+//                    print("dark mode : \(Variables.isDarkMode)")
+//                }),
+                .default(Text("Change Profile Picture"), action: {
+                    ShowImageSelect.toggle()
                 }),
                 
                     .destructive(Text("Log Out"), action: {
