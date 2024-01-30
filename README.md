@@ -7,9 +7,9 @@ Target Users:
 Anyone who needs a messaging service alternative to iMessage or WhatsApp
 
 API/Services:
-SwiftUI
-Swift Encryption API
-Firebase Database
+- SwiftUI
+- Swift Encryption API
+- Firebase Database, Storage, and Oauth
 
 
 
